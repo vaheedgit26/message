@@ -1,0 +1,5 @@
+apiVersion: v2
+name: message-frontend
+version: 1.0.0      # chart version
+description: This is message frontend deployment
+appVersion: 1.0.0   # 'message-frontend' app version

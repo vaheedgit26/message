@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-backend
+  labels:
+    app: message-backend
+    tier: backend
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: message-backend
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: message-backend
+        tier: backend
+    spec:
+           
+      initContainers:
+      - name: wait-for-mysql
+        image: mariadb:10.11.3
+        command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MySQL to be ready..."
+              until mysql -h $DB_HOST -u $DB_HEALTHCHECK_USER -e "SELECT 1" >/dev/null 2>&1; do
+                sleep 3
+              done
+              echo "MySQL is ready"
+        env:
+        - name: DB_HOST  
+          valueFrom:
+            configMapKeyRef:
+              name: message-backend-env-vars  
+              key: DB_HOST
+
+        - name: DB_HEALTHCHECK_USER  
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-initdb-config  
+              key: DB_HEALTHCHECK_USER
+              
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_HEALTHCHECK_PASSWORD
+            
+      containers:
+      - name: message-backend-cont
+        image: "{{ .Values.image.imageName }}:{{ .Values.image.imageVersion }}"   # vaheeddockerhub/product-img
+        ports:
+        - name: product
+          containerPort: 5000
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DB_PASSWORD
+        envFrom:
+        - configMapRef:
+            name: message-backend-env-vars
+
+        startupProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 20
+        
+        readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+         
+        livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-backend        # Service name
+  labels:
+    app: message-backend
+    tier: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: message-backend
+    tier: backend
+  ports:
+  - name: message
+    protocol: "TCP"
+    port: 5000
+    targetPort: 5000
+    #nodePort: 32123

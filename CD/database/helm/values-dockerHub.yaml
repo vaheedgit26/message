@@ -1,0 +1,6 @@
+image:
+  imageName: vaheeddockerhub
+  imageVersion: "1.0.0"
+
+deployment:
+  replicas: 1
