@@ -1,6 +1,6 @@
 image:
-  imageName: vaheeddockerhub
-  imageVersion: "1.0.0"
+  imageName: vaheeddockerhub/message-backend
+  imageVersion: latest
 
 deployment:
   replicas: 1
