@@ -68,9 +68,9 @@ spec:
                 - -c
                 - mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" >/dev/null 2>&1
             initialDelaySeconds: 20
-            periodSeconds: 5
+            periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 20
 
           # ─────────────────────────────
           # READINESS PROBE  (custom user)
@@ -87,7 +87,7 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 3
+            failureThreshold: 5
 
           # ─────────────────────────────
           # LIVENESS PROBE  (custom user)
@@ -103,7 +103,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 3
+            failureThreshold: 5
             
 ---
 apiVersion: v1
