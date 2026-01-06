@@ -9,14 +9,16 @@ spec:
       elements:
         - project: message
           env: dev
+          component: database
+          
+        - project: message
+          env: dev
           component: backend
+          
         - project: message
           env: dev
           component: frontend
-        - project: message
-          env: dev
-          component: database
-
+        
   template:
     metadata:
       name: "{{project}}-{{env}}-{{component}}"
@@ -80,3 +82,4 @@ spec:
       #    selfHeal: true
 
       #  {{- end }}
+
