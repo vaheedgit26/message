@@ -14,11 +14,11 @@ spec:
   # Allowed destinations (namespaces + clusters)
   destinations:
     - server: https://kubernetes.default.svc
-      namespace: product-dev
+      namespace: message-dev
     - server: https://kubernetes.default.svc
-      namespace: product-stage
+      namespace: message-stage
     - server: https://kubernetes.default.svc
-      namespace: product-prod
+      namespace: message-prod
 
   # Cluster-wide resources this AppProject can manage
   clusterResourceWhitelist:
@@ -39,3 +39,4 @@ spec:
     Single AppProject for all environments (dev, stage, prod) of Expense application.
 
     Provides GitOps permissions and allows automated namespace creation.
+
