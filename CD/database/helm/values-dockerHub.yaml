@@ -1,5 +1,5 @@
 image:
-  imageName: vaheeddockerhub/message-backend
+  imageName: vaheeddockerhub
   imageVersion: latest
 
 deployment:
