@@ -1,1 +1,35 @@
+# docker build app-code/frontend -t frontend-img:1.0.0 -f Docker/Dockerfile
+FROM nginx:stable-alpine
 
+# Remove default server and default index
+RUN rm -f \
+    /usr/share/nginx/html/index.html \
+    /etc/nginx/conf.d/default.conf
+
+# Prepare directories for non-root nginx
+RUN mkdir -p \
+    /var/cache/nginx/client_temp \
+    /var/cache/nginx/proxy_temp \
+    /var/cache/nginx/fastcgi_temp \
+    /var/cache/nginx/uwsgi_temp \
+    /var/cache/nginx/scgi_temp \
+    /run \
+    /etc/nginx/ssl \
+  && chown -R nginx:nginx \
+    /var/cache/nginx \
+    /var/log/nginx \
+    /etc/nginx \
+    /run \
+  && chmod 755 /etc/nginx
+
+# Copy custom NGINX config
+COPY message.conf /etc/nginx/conf.d/message.conf
+
+# Ensure config file permissions
+RUN chmod 644 /etc/nginx/conf.d/*.conf
+
+EXPOSE 8080
+
+USER nginx
+
+CMD ["nginx", "-g", "daemon off;"]
