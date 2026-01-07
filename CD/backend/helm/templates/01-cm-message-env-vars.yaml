@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: message-backend-env-vars
 data:
-  MYSQL_HOST: "mysql-svc"  # Service name of Mysql pod's service
-  MYSQL_USER: "message"
-  MYSQL_DB: "message"
+  DB_HOST: "mysql-svc"  # Service name of Mysql pod's service
+  DB_USER: "message"
+  DB_NAME: "message"
