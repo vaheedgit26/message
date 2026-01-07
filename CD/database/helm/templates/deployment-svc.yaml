@@ -61,16 +61,25 @@ spec:
           # Purpose:
           # - Give MySQL enough time to initialize
           # - Prevent liveness probe from killing it during startup      
-          startupProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" >/dev/null 2>&1
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 20
+          #startupProbe:
+          #  exec:
+          #    command:
+          #      - sh
+          #      - -c
+          #      - mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" >/dev/null 2>&1
+          #  initialDelaySeconds: 20
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 20
+
+            startupProbe:
+              tcpSocket:
+                port: 3306
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              timeoutSeconds: 10
+              failureThreshold: 30
+
 
           # ─────────────────────────────
           # READINESS PROBE  (custom user)
