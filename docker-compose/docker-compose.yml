@@ -6,7 +6,7 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "devops"
+      #MYSQL_DATABASE: "devops"
     ports:
       - "3306:3306"
 
@@ -34,10 +34,10 @@ services:
       - "5000:5000"
 
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_DB=devops
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=devops
 
     networks:
       - two-tier-nt
