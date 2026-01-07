@@ -44,7 +44,7 @@ spec:
                   name: mysql-secret  
                   key: DB_HEALTHCHECK_USER
 
-            - name: MYSQL_PWD
+            - name: DB_HEALTHCHECK_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
@@ -61,25 +61,16 @@ spec:
           # Purpose:
           # - Give MySQL enough time to initialize
           # - Prevent liveness probe from killing it during startup      
-          #startupProbe:
-          #  exec:
-          #    command:
-          #      - sh
-          #      - -c
-          #      - mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" >/dev/null 2>&1
-          #  initialDelaySeconds: 20
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 20
-
           startupProbe:
-            tcpSocket:
-              port: 3306
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" >/dev/null 2>&1
             initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 30
-
+            timeoutSeconds: 5
+            failureThreshold: 20
 
           # ─────────────────────────────
           # READINESS PROBE  (custom user)
@@ -92,7 +83,7 @@ spec:
               command:
                 - sh
                 - -c
-                - mysql -h 127.0.0.1 -u "$DB_HEALTHCHECK_USER" -e "SELECT 1" >/dev/null 2>&1
+                - mysql -h 127.0.0.1 -u "$DB_HEALTHCHECK_USER" -p"$DB_HEALTHCHECK_PASSWORD" -e "SELECT 1" >/dev/null 2>&1
             initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 5
@@ -108,7 +99,7 @@ spec:
               command:
                 - sh
                 - -c
-                - mysqladmin ping -h 127.0.0.1 -u "$DB_HEALTHCHECK_USER" >/dev/null 2>&1
+                - mysqladmin ping -h 127.0.0.1 -u "$DB_HEALTHCHECK_USER" -p"$DB_HEALTHCHECK_PASSWORD" >/dev/null 2>&1
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
