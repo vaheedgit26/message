@@ -61,8 +61,8 @@ spec:
         server: https://kubernetes.default.svc
         namespace: "{{project}}-{{env}}"
         
-      preserveResourcesOnDeletion: false  # Delete resources if this Application is deleted (not allowed in ApplicationSet, allowed in individual Application)
       syncPolicy:
+        #preserveResourcesOnDeletion: false  # Delete resources if this Application is deleted (not allowed in ApplicationSet, allowed in individual Application)
         automated:
           prune: true          # delete resources not in Git
           selfHeal: true       # revert out-of-band changes
