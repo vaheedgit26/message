@@ -42,8 +42,8 @@ spec:
         #notifications.argoproj.io/subscribe.on-health-degraded.email: "expense-{{env}}-{{path.basename}}@example.com"
         #notifications.argoproj.io/subscribe.on-sync-failed.email: "expense-{{env}}-{{path.basename}}@example.com"
 
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
+      #finalizers:
+      #  - resources-finalizer.argocd.argoproj.io
 
     spec:
       project: "{{project}}"         # This name should match with the name of 'AppProject' created previously
