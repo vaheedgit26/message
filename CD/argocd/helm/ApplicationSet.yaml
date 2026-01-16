@@ -62,7 +62,7 @@ spec:
         namespace: "{{project}}-{{env}}"
 
       syncPolicy:
-        #preserveResourcesOnDeletion: false  # Delete resources if this Application is deleted (not allowed in ApplicationSet)
+        #preserveResourcesOnDeletion: false  # Delete resources if this Application is deleted (not allowed in ApplicationSet, allowed in individual Application)
         automated:
           prune: true          # delete resources not in Git
           selfHeal: true       # revert out-of-band changes
